@@ -23,19 +23,19 @@ namespace MAS
             else return false;*/
             return true;
         }
-        public bool WantToRaise(int startprice, int jumpPrice)
+        public int WantToRaise(int startprice, int jumpPrice)
         {
             if (startprice + jumpPrice < Money)
             {
                 Console.WriteLine("Agent : "+Id+" Raised");
                 Money -= jumpPrice;
                 Console.WriteLine("Money : "+Money);
-                return true;
+                return jumpPrice;
 
             }
             else 
             {
-                return false;
+                return 0;
             }
         }
         public bool IsWantToRaise(int startprice, int jumpPrice)
@@ -43,7 +43,7 @@ namespace MAS
             if (startprice + jumpPrice < Money)
             {
                 return true;
-                            }
+            }
             else
             {
                 return false;

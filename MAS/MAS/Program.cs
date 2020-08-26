@@ -9,6 +9,7 @@ namespace MAS
         {
             AuctionHandler ac = new AuctionHandler();
             ac.Checker();
+            Console.ReadLine();
         }
     }
 }
