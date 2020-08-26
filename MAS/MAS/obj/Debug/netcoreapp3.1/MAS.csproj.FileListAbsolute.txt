@@ -1,0 +1,13 @@
+C:\Code\MAS\MAS\MAS\obj\Debug\netcoreapp3.1\MAS.csprojAssemblyReference.cache
+C:\Code\MAS\MAS\MAS\obj\Debug\netcoreapp3.1\MAS.AssemblyInfoInputs.cache
+C:\Code\MAS\MAS\MAS\obj\Debug\netcoreapp3.1\MAS.AssemblyInfo.cs
+C:\Code\MAS\MAS\MAS\obj\Debug\netcoreapp3.1\MAS.csproj.CoreCompileInputs.cache
+C:\Code\MAS\MAS\MAS\bin\Debug\netcoreapp3.1\MAS.exe
+C:\Code\MAS\MAS\MAS\bin\Debug\netcoreapp3.1\MAS.deps.json
+C:\Code\MAS\MAS\MAS\bin\Debug\netcoreapp3.1\MAS.runtimeconfig.json
+C:\Code\MAS\MAS\MAS\bin\Debug\netcoreapp3.1\MAS.runtimeconfig.dev.json
+C:\Code\MAS\MAS\MAS\bin\Debug\netcoreapp3.1\MAS.dll
+C:\Code\MAS\MAS\MAS\bin\Debug\netcoreapp3.1\MAS.pdb
+C:\Code\MAS\MAS\MAS\obj\Debug\netcoreapp3.1\MAS.dll
+C:\Code\MAS\MAS\MAS\obj\Debug\netcoreapp3.1\MAS.pdb
+C:\Code\MAS\MAS\MAS\obj\Debug\netcoreapp3.1\MAS.genruntimeconfig.cache
