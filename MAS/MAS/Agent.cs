@@ -18,10 +18,6 @@ namespace MAS
         }
         public bool WantToSub(int startPrice, int jumpPrice)
         {
-            /*            Random _rnd = new Random();
-                        int number = _rnd.Next(0, 3);
-                        if (number == 0) return true;
-                        else return false;*/
             if (startPrice + jumpPrice < Money)
                 return true;
             else return false;
@@ -30,7 +26,7 @@ namespace MAS
         {
             Random rand = new Random();
             int newraise = rand.Next(jumpPrice, Money);
-            if (startprice+jumpPrice < Money)
+            if (IsWantToRaise(startprice,jumpPrice))
             {
                 Console.WriteLine("Agent : "+Id+" Raised");
                 Console.WriteLine("Money of Agent {0} : {1}",Id,Money);

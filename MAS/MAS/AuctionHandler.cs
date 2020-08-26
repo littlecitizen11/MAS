@@ -24,6 +24,8 @@ namespace MAS
             Buildings = new ItemFactory().GetBuildingLists();
             BuildingAuctions = new List<Auction>();     
             BuildingAuctions.Add(new Auction(1, Buildings[0], 1, 1, DateTime.Now.AddSeconds(5)));
+            BuildingAuctions.Add(new Auction(2, Buildings[1], 10, 2, DateTime.Now.AddSeconds(6)));
+
         }
         public void RunAuctions()
         {
