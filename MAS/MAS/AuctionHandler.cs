@@ -34,7 +34,7 @@ namespace MAS
                 {
                     DateTime nowTime = DateTime.Now;
                     int tickTime = (int)(item.StartDateAndTime - DateTime.Now).TotalMilliseconds;
-                    tasks.Add(Task.Factory.StartNew(async
+                    tasks.Add(Task.Run(async
                         () => {
                              await AsyncExecuteAuction(item, tickTime);
                         } ));

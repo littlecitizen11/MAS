@@ -41,9 +41,9 @@ namespace MAS
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("Auction of the item : "+Product.Name);
-            Console.WriteLine("First Price : "+Price);
-            Console.WriteLine("Jumps : "+JumpOfPrice);
+            Console.WriteLine("Auction of the item : " + Product.Name);
+            Console.WriteLine("First Price : " + Price);
+            Console.WriteLine("Jumps : " + JumpOfPrice);
             Console.WriteLine("-----------------------");
         }
 
@@ -58,8 +58,8 @@ namespace MAS
             Console.WriteLine("Auction of the item : " + Product.Name);
             if (MaxRaiser.Agent != null)
             {
-                Console.WriteLine("The winner is : "+MaxRaiser.Agent.Name);
-                Console.WriteLine("Price Win : "+Price);
+                Console.WriteLine("The winner is : " + MaxRaiser.Agent.Name);
+                Console.WriteLine("Price Win : " + Price);
             }
             else
                 Console.WriteLine("No winners");
@@ -73,10 +73,13 @@ namespace MAS
             IsOpen = true;
             aTimer = new Timer(10000);
             bool cancel = false;
-            aTimer.Elapsed += (s, e) => {cancel = true; aTimer.Stop();};            
+            aTimer.Elapsed += (s, e) => { cancel = true; Console.WriteLine("#######SHIT######"); aTimer.Stop(); aTimer.Enabled = false; };
             aTimer.Start();
+            Console.WriteLine("###STARTED###");
             while (!cancel)
             {
+                if (UpdateAuction != null)
+                {
                     if (UpdateAuction.GetInvocationList().Length > 1)
                     {
                         MaxRaiser = ExecuteAuctionRound();
@@ -86,18 +89,27 @@ namespace MAS
                         {
                             if (UpdateAuction.GetInvocationList().Length > 1)
                             {
+                                aTimer.Stop();
+                                aTimer.Close();
+                                aTimer.Dispose();
                                 aTimer = new Timer(10000);
                                 aTimer.Start();
                             }
+                            else
+                            {
+                                Console.WriteLine("###INNER ELSE###");
+                                cancel = true;
+                            }
                         }
-
                         else
                             cancel = true;
                     }
+                }
                 else
                     cancel = true;
             }
             aTimer.Stop();
+            aTimer.Enabled = false;
             IsOpen = false;
             aTimer.Dispose();
             PrintAuctionEnd();
@@ -105,7 +117,7 @@ namespace MAS
                 return Price;
             else
                 return 0;
-        }   
+        }
         public void Subscribe(IAgent agent)
         {
             UpdateAuction += new Func<int, int, Raiser>(agent.WantToRaise);
@@ -114,7 +126,7 @@ namespace MAS
         {
             foreach (var item in Agents)
             {
-                if(!item.IsWantToRaise(Price,JumpOfPrice))
+                if (!item.IsWantToRaise(Price, JumpOfPrice))
                 {
                     UpdateAuction -= new Func<int, int, Raiser>(item.WantToRaise);
                 }
@@ -136,8 +148,9 @@ namespace MAS
       }));
   });
             }
-                Task.WaitAll(tasks.ToArray());
-            return raisers.OrderByDescending(item => item.RaisePrice).First();
+            Task.WaitAll(tasks.ToArray());
+                return raisers.OrderByDescending(item => item.RaisePrice).First();
+
 
         }
     }
