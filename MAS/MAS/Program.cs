@@ -8,7 +8,7 @@ namespace MAS
         static void Main(string[] args)
         {
             AuctionHandler ac = new AuctionHandler();
-            ac.Checker();
+            ac.RunAuctions();
             Console.ReadLine();
         }
     }

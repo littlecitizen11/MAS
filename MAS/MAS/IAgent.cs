@@ -8,8 +8,10 @@ namespace MAS
     {
         public int Id { get; set; }
         public int Money { get; set; }
-        public int WantToRaise(int startprice, int jumpPrice);
+        public string Name { get; set; }
+        public Raiser WantToRaise(int startprice, int jumpPrice);
         public bool IsWantToRaise(int startprice, int jumpPrice);
+        public bool WantToSub(int startPrice, int jumpPrice);
 
     }
 }

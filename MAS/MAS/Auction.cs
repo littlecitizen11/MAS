@@ -8,19 +8,20 @@ using System.Timers;
 
 namespace MAS
 {
-    public class Auction<T>
+    public class Auction
     {
         private static Timer aTimer;
         public int Id { get; set; }
-        public T Product { get; set; }
+        public IItem Product { get; set; }
         public int Price { get; set; }
         public int JumpOfPrice { get; set; }
         public DateTime StartDateAndTime { get; set; }
         public bool IsOpen { get; set; }
         public List<IAgent> Agents { get; set; }
-        public event Func<int, int, int> UpdateAuction;
+        public Raiser MaxRaiser { get; set; }
+        public event Func<int, int, Raiser> UpdateAuction;
 
-        public Auction(int id, T product, int price, int jumpofprice, DateTime startDateTime)
+        public Auction(int id, IItem product, int price, int jumpofprice, DateTime startDateTime)
         {
             Id = id;
             Product = product;
@@ -29,72 +30,109 @@ namespace MAS
             StartDateAndTime = startDateTime;
             IsOpen = false;
             Agents = new List<IAgent>();
+            MaxRaiser = new Raiser();
 
         }
-        public void StartAuction()
+        public void PrintAuctionStart()
         {
-            IsOpen = true;
+            Console.WriteLine("-----------------------");
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.WriteLine("Auction Opened !");
+            Console.ResetColor();
+            Console.WriteLine("Auction of the item : "+Product.Name);
+            Console.WriteLine("First Price : "+Price);
+            Console.WriteLine("Jumps : "+JumpOfPrice);
+            Console.WriteLine("-----------------------");
         }
+
+        public void PrintAuctionEnd()
+        {
+            Console.WriteLine("-----------------------");
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.Write("Auction Ended!");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine("Auction of the item : " + Product.Name);
+            if (MaxRaiser != null)
+            {
+                Console.WriteLine("The winner is : "+MaxRaiser.Agent.Name);
+                Console.WriteLine("Price Win : "+Price);
+            }
+            else
+                Console.WriteLine("No winners");
+            Console.WriteLine("-----------------------");
+        }
+
         public int RunAuction()
         {
+            PrintAuctionStart();
             IsOpen = true;
-            aTimer = new Timer();
-            aTimer.Interval = 100;
-            aTimer.AutoReset = false;
-            aTimer.Enabled = true;
+            aTimer = new Timer(10000);
             bool cancel = false;
-            aTimer.Elapsed += (s, e) => cancel = true;
+            aTimer.Elapsed += (s, e) => {cancel = true; aTimer.Stop();};            
             aTimer.Start();
             while (!cancel)
             {
+                //if (UpdateAuction != null)
+                //{
+                    if (UpdateAuction.GetInvocationList().Length > 1)
+                    {
+                        MaxRaiser = ExecuteAuctionRound();
+                        UnSubscribe();
+                        Price += MaxRaiser.RaisePrice;
+                        if (UpdateAuction != null)
+                        {
+                            if (UpdateAuction.GetInvocationList().Length > 1)
+                            {
+                                //aTimer.Stop();
+                                aTimer = new Timer(10000);
+                                aTimer.Start();
+                            }
+                        }
 
-                if (UpdateAuction.GetInvocationList().Length > 1)
-                {
-                    Price+=Update();
-                    aTimer = new Timer();
-                    aTimer.Interval = 100;
-                    Console.WriteLine("######");
-                    Console.WriteLine("Price now is : " + Price);
-                    Console.WriteLine("######");
-                }
+                        else
+                            cancel = true;
+                    }
+                //}
                 else
                     cancel = true;
             }
-            aTimer.Enabled = false;
             aTimer.Stop();
-            aTimer.Close();
             IsOpen = false;
-            Console.WriteLine("Finish");
-            return 10;
+            aTimer.Dispose();
+            PrintAuctionEnd();
+            return Price;
         }   
         public void Subscribe(IAgent agent)
         {
-            UpdateAuction += new Func<int, int, int>(agent.WantToRaise);
+            UpdateAuction += new Func<int, int, Raiser>(agent.WantToRaise);
         }
-        public void UnSubscribe(IAgent agent)
+        public void UnSubscribe()
         {
             foreach (var item in Agents)
             {
                 if(!item.IsWantToRaise(Price,JumpOfPrice))
                 {
-                    UpdateAuction -= new Func<int, int, int>(item.WantToRaise);
-                    //Agents.Remove(item);
+                    UpdateAuction -= new Func<int, int, Raiser>(item.WantToRaise);
                 }
             }
         }
-
-        public int Update()
+        public Raiser ExecuteAuctionRound()
         {
-            //UpdateAuction?.Invoke(Price, JumpOfPrice);
-            //UpdateAuction.GetInvocationList()
-            var tasks = new List<Task>();
-            var numbers = new List<int>();
-            foreach (Func<int, int, int> item in UpdateAuction.GetInvocationList())
-            {
-                numbers.Add(item.Invoke(Price,JumpOfPrice));
-            }
-            return numbers.Max();
-            
+            List<Task> tasks = new List<Task>();
+            List<Raiser> raisers = new List<Raiser>();
+            object _lock = new object();
+                Parallel.ForEach(UpdateAuction.GetInvocationList(), item =>
+                {
+                    tasks.Add(Task.Factory.StartNew(() =>
+                    {
+                        lock (_lock)
+                            raisers.Add((Raiser)item.DynamicInvoke(Price, JumpOfPrice));
+                    }));
+                });
+                Task.WaitAll(tasks.ToArray());
+            return raisers.OrderByDescending(item => item.RaisePrice).First();
+
         }
     }
 }

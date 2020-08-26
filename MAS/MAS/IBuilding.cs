@@ -4,9 +4,8 @@ using System.Text;
 
 namespace MAS
 {
-    public interface IBuilding
+    public interface IBuilding:IItem
     {
-        public string Name { get; set; }
         public int NumOfRooms { get; set; }
         public int RoomSize { get; set; }
         public bool HighWay { get; set; }
