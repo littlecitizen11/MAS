@@ -90,8 +90,9 @@ namespace MAS
                             {
                                 aTimer.Stop();
                                 aTimer.Close();
-                                aTimer.Dispose();
-                                aTimer.Interval=10000;
+                                //aTimer.Dispose();
+                                //aTimer = new Timer(10000);
+                                aTimer.Interval=1000;
                                 aTimer.Start();
                             }
                             else
