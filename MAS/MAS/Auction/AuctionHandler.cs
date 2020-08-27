@@ -22,9 +22,6 @@ namespace MAS
             TotalPrice = new ConcurrentDictionary<int, int>();
             Agents = new AgentFactory().AgentList;
             Auctions = new AuctionFactory().AuctionsList;
-            //Auctions.Add(new Auction(1, Buildings[0], 1, 3, DateTime.Now.AddSeconds(5)));
-            //BuildingAuctions.Add(new Auction(2, Buildings[1], 10, 2, DateTime.Now.AddSeconds(6)));
-
         }
         public void RunAuctions()
         {
@@ -39,7 +36,6 @@ namespace MAS
                         } ));
                 }
             Task.WaitAll(tasks.ToArray());
-            Task.WaitAny(tasks.ToArray());
         }
         public async Task AsyncExecuteAuction(Auction auction, int milisec)
         {

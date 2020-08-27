@@ -8,7 +8,7 @@ namespace MAS
     {
         public List<IItem> ItemLists { get; set; }
         public ItemFactory()
-        {
+        {//might add any List of Items by the AddRange - should create new method to generate
             ItemLists = new List<IItem>();
             ItemLists.AddRange(GetBuildingLists());
         }

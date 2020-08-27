@@ -73,9 +73,8 @@ namespace MAS
             IsOpen = true;
             aTimer = new Timer(10000);
             bool cancel = false;
-            aTimer.Elapsed += (s, e) => { cancel = true; Console.WriteLine("#######SHIT######"); aTimer.Stop(); aTimer.Enabled = false; };
+            aTimer.Elapsed += (s, e) => { cancel = true; aTimer.Stop(); aTimer.Enabled = false; };
             aTimer.Start();
-            Console.WriteLine("###STARTED###");
             while (!cancel)
             {
                 if (UpdateAuction != null)
@@ -85,21 +84,18 @@ namespace MAS
                         ExecuteAuctionRound();
                         UnSubscribe();
                         Price = MaxRaiser.RaisePrice;
-                        Console.WriteLine("######## PRICE IS {0} ########",Price);
                         if (UpdateAuction != null)
                         {
                             if (UpdateAuction.GetInvocationList().Length > 1)
                             {
-/*                                aTimer.Stop();
+                                aTimer.Stop();
                                 aTimer.Close();
                                 aTimer.Dispose();
-                                aTimer = new Timer(10000);*/
-                                aTimer.Interval=1000;
+                                aTimer.Interval=10000;
                                 aTimer.Start();
                             }
                             else
                             {
-                                Console.WriteLine("###INNER ELSE###");
                                 cancel = true;
                             }
                         }
