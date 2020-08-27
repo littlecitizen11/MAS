@@ -89,7 +89,7 @@ namespace MAS
                             if (UpdateAuction.GetInvocationList().Length > 1)
                             {
                                 aTimer.Stop();
-                                aTimer.Close();
+                                aTimer.Close(); 
                                 //aTimer.Dispose();
                                 //aTimer = new Timer(10000);
                                 aTimer.Interval=1000;

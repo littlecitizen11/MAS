@@ -14,7 +14,6 @@ namespace MAS
     public class AuctionHandler
     {
         public List<IAgent> Agents { get; set; }
-        public List<IItem> Buildings { get; set; }
         public ConcurrentDictionary<int,int> TotalPrice { get; set; }
         public List<Auction> Auctions { get; set; }
         public AuctionHandler()
