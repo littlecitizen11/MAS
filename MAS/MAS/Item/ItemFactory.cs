@@ -6,7 +6,12 @@ namespace MAS
 {
     public class ItemFactory
     {
-        //public List<IItem> ItemLists { get; set; }
+        public List<IItem> ItemLists { get; set; }
+        public ItemFactory()
+        {
+            ItemLists = new List<IItem>();
+            ItemLists.AddRange(GetBuildingLists());
+        }
         public List<IItem> GetBuildingLists()
         {
             List<IItem> ItemLists = new List<IItem>();

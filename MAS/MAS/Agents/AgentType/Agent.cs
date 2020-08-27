@@ -18,20 +18,20 @@ namespace MAS
         }
         public bool WantToSub(int startPrice, int jumpPrice)
         {
-            if (startPrice + jumpPrice < Money)
-                return true;
-            else return false;
+            //Might be here another logic to subscribe to Auction -- This is the different between IsWantToRaise
+            return (startPrice + jumpPrice < Money);
+
         }
         public Raiser WantToRaise(int startprice, int jumpPrice)
         {
-            Random rand = new Random();
-            int newraise = rand.Next(jumpPrice, Money);
+
             if (IsWantToRaise(startprice,jumpPrice))
             {
-                Console.WriteLine("Agent : "+Id+" Raised");
-                Console.WriteLine("Money of Agent {0} : {1}",Id,Money);
-                Money -= newraise;
-                Console.WriteLine("Money After raise of Agent {0} : {1}", Id, Money);
+                Random rand = new Random();
+                int newraise = rand.Next(startprice + jumpPrice, Money);
+                Console.WriteLine("Agent : "+Name+" Raised");
+                Console.WriteLine("Money of Agent {0} : {1}",Name,Money);
+                Console.WriteLine("raise {0} : {1}", Name, newraise);
                 return new Raiser(this, newraise);
             }
             else 
@@ -41,14 +41,8 @@ namespace MAS
         }
         public bool IsWantToRaise(int startprice, int jumpPrice)
         {
-            if (startprice + jumpPrice < Money)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            //Might be here another logic to subscribe to Auction -- This is the different between WantToSub
+            return (startprice + jumpPrice < Money);
         }
     }
 }

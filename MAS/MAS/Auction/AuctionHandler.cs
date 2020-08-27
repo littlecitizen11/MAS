@@ -16,21 +16,20 @@ namespace MAS
         public List<IAgent> Agents { get; set; }
         public List<IItem> Buildings { get; set; }
         public ConcurrentDictionary<int,int> TotalPrice { get; set; }
-        public List<Auction> BuildingAuctions { get; set; }
+        public List<Auction> Auctions { get; set; }
         public AuctionHandler()
         {
             TotalPrice = new ConcurrentDictionary<int, int>();
             Agents = new AgentFactory().AgentList;
-            Buildings = new ItemFactory().GetBuildingLists();
-            BuildingAuctions = new List<Auction>();     
-            BuildingAuctions.Add(new Auction(1, Buildings[0], 1, 1, DateTime.Now.AddSeconds(5)));
-            BuildingAuctions.Add(new Auction(2, Buildings[1], 10, 2, DateTime.Now.AddSeconds(6)));
+            Auctions = new AuctionFactory().AuctionsList;
+            //Auctions.Add(new Auction(1, Buildings[0], 1, 3, DateTime.Now.AddSeconds(5)));
+            //BuildingAuctions.Add(new Auction(2, Buildings[1], 10, 2, DateTime.Now.AddSeconds(6)));
 
         }
         public void RunAuctions()
         {
             List<Task> tasks = new List<Task>();
-                foreach (var item in BuildingAuctions)
+                foreach (var item in Auctions)
                 {
                     DateTime nowTime = DateTime.Now;
                     int tickTime = (int)(item.StartDateAndTime - DateTime.Now).TotalMilliseconds;

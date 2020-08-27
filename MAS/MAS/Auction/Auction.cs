@@ -82,17 +82,19 @@ namespace MAS
                 {
                     if (UpdateAuction.GetInvocationList().Length > 1)
                     {
-                        MaxRaiser = ExecuteAuctionRound();
+                        ExecuteAuctionRound();
                         UnSubscribe();
-                        Price += MaxRaiser.RaisePrice;
+                        Price = MaxRaiser.RaisePrice;
+                        Console.WriteLine("######## PRICE IS {0} ########",Price);
                         if (UpdateAuction != null)
                         {
                             if (UpdateAuction.GetInvocationList().Length > 1)
                             {
-                                aTimer.Stop();
+/*                                aTimer.Stop();
                                 aTimer.Close();
                                 aTimer.Dispose();
-                                aTimer = new Timer(10000);
+                                aTimer = new Timer(10000);*/
+                                aTimer.Interval=1000;
                                 aTimer.Start();
                             }
                             else
@@ -114,7 +116,10 @@ namespace MAS
             aTimer.Dispose();
             PrintAuctionEnd();
             if (MaxRaiser.Agent != null)
+            {
+                MaxRaiser.Agent.Money -= MaxRaiser.RaisePrice;
                 return Price;
+            }
             else
                 return 0;
         }
@@ -132,7 +137,7 @@ namespace MAS
                 }
             }
         }
-        public Raiser ExecuteAuctionRound()
+        public void ExecuteAuctionRound()
         {
             List<Task> tasks = new List<Task>();
             List<Raiser> raisers = new List<Raiser>();
@@ -149,8 +154,16 @@ namespace MAS
   });
             }
             Task.WaitAll(tasks.ToArray());
-                return raisers.OrderByDescending(item => item.RaisePrice).First();
+            if (raisers != null)
+            {
+                var check = raisers.OrderByDescending(item => item.RaisePrice).First();
 
+                if (check.RaisePrice > Price)
+                {
+                    Price = check.RaisePrice;
+                    MaxRaiser = check;
+                }
+            }
 
         }
     }
